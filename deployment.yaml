@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rolling-update-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: rolling-update-app
+  template:
+    metadata:
+      labels:
+        app: rolling-update-app
+    spec:
+      containers:
+      - name: rolling-update-app
+        image: [IMAGE_URL]
+        ports:
+        - containerPort: 80

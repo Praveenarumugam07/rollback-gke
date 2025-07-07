@@ -1,0 +1,19 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/qwiklabs-gcp-02-a4f64ee8610b/rolling-repo/rolling-update-app:$COMMIT_SHA', '.']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/qwiklabs-gcp-02-a4f64ee8610b/rolling-repo/rolling-update-app:$COMMIT_SHA']
+
+- name: 'gcr.io/cloud-builders/kubectl'
+  args:
+  - set
+  - image
+  - deployment/rolling-update-app
+  - rolling-update-app=us-central1-docker.pkg.dev/qwiklabs-gcp-02-a4f64ee8610b/rolling-repo/rolling-update-app:$COMMIT_SHA
+  env:
+  - 'CLOUDSDK_COMPUTE_REGION=us-central1'
+  - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1'
+images:
+- 'us-central1-docker.pkg.dev/qwiklabs-gcp-02-a4f64ee8610b/rolling-repo/rolling-update-app:$COMMIT_SHA'
